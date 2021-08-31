@@ -6,6 +6,8 @@ export var jump_impulse = 25
 
 var velocity = Vector3.ZERO
 
+var player_state
+
 onready var pivot = $Pivot
 
 func _physics_process(delta):
@@ -13,7 +15,7 @@ func _physics_process(delta):
 	apply_movement(input_vector)
 	apply_gravity(delta)
 	velocity = move_and_slide(velocity, Vector3.UP)
-	
+	define_player_state()
 	
 func get_input_vector():
 	var input_vector = Vector3.ZERO
@@ -41,3 +43,7 @@ func apply_gravity(delta):
 func set_damage(damage):
 	print("Damage: " + str(damage))
 
+func define_player_state():
+	player_state = {"T": OS.get_system_time_msecs(), "P": global_transform.origin }
+	Server.send_player_state(player_state)
+	

@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Map.gd" type="Script" id=2]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_color = Color( 0.870588, 0.701961, 0.117647, 1 )
@@ -11,9 +12,24 @@ albedo_color = Color( 0.92549, 0.647059, 0.113725, 1 )
 [sub_resource type="SpatialMaterial" id=3]
 albedo_color = Color( 0.364706, 0.309804, 0.309804, 1 )
 
-[node name="Spatial" type="Spatial"]
+[node name="Map" type="Node"]
+script = ExtResource( 2 )
 
-[node name="CSGBox5" type="CSGBox" parent="."]
+[node name="DirectionalLight" type="DirectionalLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.34261, 0.939478, 0, -0.939478, 0.34261, 0, 3.91781, 3.41323 )
+
+[node name="Terrain" type="Node" parent="."]
+
+[node name="Ground" type="CSGBox" parent="Terrain"]
+transform = Transform( 0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0, -1, 0 )
+use_collision = true
+width = 100.0
+height = 0.5
+depth = 100.0
+
+[node name="Walls" type="Node" parent="Terrain"]
+
+[node name="CSGBox5" type="CSGBox" parent="Terrain/Walls"]
 transform = Transform( -0.707106, 0, -0.707106, 0, 1, 0, 0.707106, 0, -0.707106, -11.2742, 3.10565, -30.8125 )
 use_collision = true
 width = 2.36483
@@ -21,20 +37,39 @@ height = 8.23876
 depth = 35.902
 material = SubResource( 1 )
 
-[node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.34261, 0.939478, 0, -0.939478, 0.34261, 0, 3.91781, 3.41323 )
-
-[node name="Player" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.716388, 3.89765, 0.0248296 )
-
-[node name="CSGBox" type="CSGBox" parent="."]
-transform = Transform( 0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0, -1, 0 )
+[node name="CSGBox6" type="CSGBox" parent="Terrain/Walls"]
+transform = Transform( 0.707106, 0, -0.707106, 0, 1, 0, 0.707106, 0, 0.707106, -10.7689, 3.06782, 33.5021 )
 use_collision = true
-width = 100.0
-height = 0.5
-depth = 100.0
+width = 2.36483
+height = 8.23876
+depth = 35.902
+material = SubResource( 1 )
 
-[node name="CSGBox2" type="CSGBox" parent="."]
+[node name="CSGBox7" type="CSGBox" parent="Terrain/Walls"]
+transform = Transform( -1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, -1, 33.048, 2.67036, 19.1334 )
+use_collision = true
+width = 2.36483
+height = 8.23876
+depth = 35.902
+material = SubResource( 2 )
+
+[node name="CSGBox8" type="CSGBox" parent="Terrain/Walls"]
+transform = Transform( -8.9407e-08, 0, 0.999999, 0, 1, 0, -0.999999, 0, -8.9407e-08, 49.7885, 2.75482, 1.04931 )
+use_collision = true
+width = 2.36483
+height = 8.23876
+depth = 35.902
+material = SubResource( 1 )
+
+[node name="CSGBox3" type="CSGBox" parent="Terrain/Walls"]
+transform = Transform( 0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -12.3591, 3.17078, 8.35203 )
+use_collision = true
+width = 2.36483
+height = 8.23876
+depth = 35.902
+material = SubResource( 2 )
+
+[node name="CSGBox2" type="CSGBox" parent="Terrain/Walls"]
 transform = Transform( 0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 13.3505, 2.69934, -31.7625 )
 use_collision = true
 width = 2.36483
@@ -42,39 +77,33 @@ height = 8.23876
 depth = 35.902
 material = SubResource( 2 )
 
-[node name="CSGBox5" type="CSGBox" parent="CSGBox2"]
-transform = Transform( 0.999999, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, 0.999999, 29.094, 0.368477, 63.204 )
+[node name="Ceilling" type="Node" parent="Terrain"]
+
+[node name="CSGBox4" type="CSGBox" parent="Terrain/Ceilling"]
+transform = Transform( 0.707101, 0, -0.707101, 0, 1, 0, 0.707101, 0, 0.707101, -33.6704, 18.828, 14.8748 )
 use_collision = true
 width = 2.36483
-height = 8.23876
-depth = 35.902
-material = SubResource( 1 )
+height = 1.00641
+depth = 66.1271
+material = SubResource( 3 )
 
-[node name="CSGBox2" type="CSGBox" parent="CSGBox2"]
-transform = Transform( -8.9407e-08, 0, 1, 0, 1, 0, -1, 0, -8.9407e-08, 10.1858, 0.471437, 46.5447 )
+[node name="CSGBox5" type="CSGBox" parent="Terrain/Ceilling"]
+transform = Transform( -0.707103, 0, -0.707103, 0, 1, 0, 0.707103, 0, -0.707103, -34.2742, 18.8091, -31.4172 )
 use_collision = true
 width = 2.36483
-height = 8.23876
-depth = 35.902
-material = SubResource( 2 )
+height = 1.00641
+depth = 66.1271
+material = SubResource( 3 )
 
-[node name="CSGBox5" type="CSGBox" parent="CSGBox2/CSGBox2"]
-transform = Transform( 0.707106, 0, 0.707106, 0, 1, 0, -0.707106, 0, 0.707106, 49.1088, -0.415961, 38.7812 )
+[node name="CSGBox6" type="CSGBox" parent="Terrain/Ceilling"]
+transform = Transform( -0.707103, 0, 0.707103, 0, 1, 0, -0.707103, 0, -0.707103, 23.6021, 14.7191, -48.5711 )
 use_collision = true
 width = 2.36483
-height = 8.23876
-depth = 35.902
-material = SubResource( 1 )
+height = 1.00641
+depth = 66.1271
+material = SubResource( 3 )
 
-[node name="CSGBox2" type="CSGBox" parent="CSGBox2/CSGBox2"]
-transform = Transform( -0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 24.4841, -0.500417, 39.7312 )
-use_collision = true
-width = 2.36483
-height = 8.23876
-depth = 35.902
-material = SubResource( 2 )
-
-[node name="CSGBox4" type="CSGBox" parent="."]
+[node name="CSGBox7" type="CSGBox" parent="Terrain/Ceilling"]
 transform = Transform( 0.707105, 0, 0.707105, 0, 1, 0, -0.707105, 0, 0.707105, 24.2059, 14.7002, -2.27895 )
 use_collision = true
 width = 2.36483
@@ -82,26 +111,9 @@ height = 1.00641
 depth = 66.1271
 material = SubResource( 3 )
 
-[node name="CSGBox4" type="CSGBox" parent="CSGBox4"]
-transform = Transform( -8.9407e-08, 0, 0.999997, 0, 1, 0, -0.999997, 0, -8.9407e-08, 32.3066, 0.018898, -33.1605 )
-use_collision = true
-width = 2.36483
-height = 1.00641
-depth = 66.1271
-material = SubResource( 3 )
+[node name="Instances" type="Node" parent="."]
 
-[node name="CSGBox5" type="CSGBox" parent="CSGBox4"]
-transform = Transform( -0.999997, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, -0.999997, -20.7479, 4.10886, -61.9557 )
-use_collision = true
-width = 2.36483
-height = 1.00641
-depth = 66.1271
-material = SubResource( 3 )
+[node name="Player" parent="Instances" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 0 )
 
-[node name="CSGBox4" type="CSGBox" parent="CSGBox4/CSGBox5"]
-transform = Transform( -8.9407e-08, 0, 0.999997, 0, 1, 0, -0.999997, 0, -8.9407e-08, 32.3066, 0.018898, -33.1605 )
-use_collision = true
-width = 2.36483
-height = 1.00641
-depth = 66.1271
-material = SubResource( 3 )
+[node name="OtherPlayers" type="Node" parent="Instances"]
