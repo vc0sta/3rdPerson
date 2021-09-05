@@ -29,7 +29,7 @@ func _physics_process(delta):
 	apply_gravity(delta)
 	update_snap_vector()
 	jump()
-	apply_controller_rotation()
+	#apply_controller_rotation()
 	#spring_arm.rotation.x = clamp(spring_arm.rotation.x, deg2rad(-75), deg2rad(75))
 	velocity = move_and_slide_with_snap(velocity, snap_vector, Vector3.UP, true)
 	define_player_state()
@@ -91,7 +91,7 @@ func set_damage(damage):
 	print("Damage: " + str(damage))
 
 func define_player_state():
-	player_state = {"T": OS.get_system_time_msecs(), "P": global_transform.origin }
+	player_state = {"T": OS.get_system_time_msecs(), "P": global_transform.origin, "Rx": pivot.transform.basis.x,  "Rz": pivot.transform.basis.z }
 	Server.send_player_state(player_state)
 	
 

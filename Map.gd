@@ -21,7 +21,7 @@ func despawn_player(player_id):
 	print("removing player: " + str(player_id))
 	get_node("Instances/OtherPlayers/" + str(player_id)).queue_free()
 
-func _physics_process(_delta):
+func _physics_process(delta):
 	var render_time = OS.get_system_time_msecs() - interpolation_offset
 	if world_state_buffer.size() > 1:
 		while world_state_buffer.size() > 2 and render_time > world_state_buffer[2].T:
@@ -36,8 +36,12 @@ func _physics_process(_delta):
 				if not world_state_buffer[1].has(player):
 					continue
 				if get_node("Instances/OtherPlayers").has_node(str(player)):
+					var player_instance = get_node("Instances/OtherPlayers/" + str(player))
 					var new_position = lerp(world_state_buffer[1][player]["P"], world_state_buffer[2][player]["P"], interpolation_factor)
-					get_node("Instances/OtherPlayers/" + str(player)).move_player(new_position)
+					var new_rotation_x = lerp(world_state_buffer[1][player]["Rx"], world_state_buffer[2][player]["Rx"], interpolation_factor)
+					var new_rotation_z = lerp(world_state_buffer[1][player]["Rz"], world_state_buffer[2][player]["Rz"], interpolation_factor)
+					var new_rotation = [new_rotation_x, new_rotation_z]
+					player_instance.move_player(new_position, new_rotation)
 				else:
 					print("spawning player")
 					spawn_new_player(player, world_state_buffer[2][player]["P"])
@@ -52,8 +56,11 @@ func _physics_process(_delta):
 					continue
 				if get_node("Instances/OtherPlayers").has_node(str(player)):
 					var position_delta = (world_state_buffer[1][player]["P"] - world_state_buffer[0][player]["P"])
+					var rotation_x_delta = (world_state_buffer[1][player]["Rx"] - world_state_buffer[0][player]["Rx"])
+					var rotation_z_delta = (world_state_buffer[1][player]["Rz"] - world_state_buffer[0][player]["Rz"])
 					var new_position = world_state_buffer[1][player]["P"] + (position_delta * extrarpolation_factor)
-					get_node("Instances/OtherPlayers/" + str(player)).move_player(new_position)
+					var new_rotation = [rotation_x_delta, rotation_z_delta]
+					get_node("Instances/OtherPlayers/" + str(player)).move_player(new_position, new_rotation)
 				else:
 					print("spawning player")
 					spawn_new_player(player, world_state_buffer[2][player]["P"])
