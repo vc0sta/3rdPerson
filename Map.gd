@@ -1,6 +1,6 @@
 extends Node
 
-var player_spawn = preload("res://Player/PlayerTemplate.tscn")
+var player_spawn = preload("res://Scenes/Player/PlayerTemplate.tscn")
 var last_world_state = 0
 
 var world_state_buffer = []
