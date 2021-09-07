@@ -25,7 +25,7 @@ func _physics_process(delta):
 	apply_friction(direction, delta)
 	apply_gravity(delta)
 	update_snap_vector()
-	jump()
+	#jump()
 	#apply_controller_rotation()
 	velocity = move_and_slide_with_snap(velocity, snap_vector, Vector3.UP, true)
 	define_player_state()
@@ -43,7 +43,7 @@ func get_direction(input_vector):
 	
 	
 func apply_movement(input_vector, direction, delta):
-	animation.set("parameters/Idle2Moving/blend_amount", input_vector.length())
+	animation.set("parameters/Movement/blend_amount", input_vector.length())
 	if direction != Vector3.ZERO:
 		velocity.x = velocity.move_toward(direction * max_speed, acceleration * delta).x
 		velocity.z = velocity.move_toward(direction * max_speed, acceleration * delta).z
@@ -67,12 +67,12 @@ func update_snap_vector():
 	snap_vector = -get_floor_normal() if is_on_floor() else Vector3.DOWN
 	
 	
-func jump():
-	if Input.is_action_just_pressed("jump") and is_on_floor():
-		snap_vector = Vector3.ZERO
-		velocity.y = jump_impulse
-	if Input.is_action_just_released("jump") and velocity.y > jump_impulse / 2:
-		velocity.y = jump_impulse / 2
+# func jump():
+#	if Input.is_action_just_pressed("jump") and is_on_floor():
+#		snap_vector = Vector3.ZERO
+#		velocity.y = jump_impulse
+#	if Input.is_action_just_released("jump") and velocity.y > jump_impulse / 2:
+#		velocity.y = jump_impulse / 2
 		
 		
 func apply_controller_rotation():
@@ -88,7 +88,7 @@ func set_damage(damage):
 	print("Damage: " + str(damage))
 
 func define_player_state():
-	player_state = {"T": OS.get_system_time_msecs(), "P": global_transform.origin, "Rx": pivot.transform.basis.x,  "Rz": pivot.transform.basis.z }
+	player_state = {"T": OS.get_system_time_msecs(), "P": global_transform.origin, "Rx": pivot.transform.basis.x,  "Rz": pivot.transform.basis.z, "Am": animation.get("parameters/Movement/blend_amount") }
 	Server.send_player_state(player_state)
 	
 
