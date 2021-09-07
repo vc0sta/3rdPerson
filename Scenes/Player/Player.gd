@@ -15,11 +15,8 @@ var snap_vector = Vector3.ZERO
 var player_state
 
 onready var pivot = $Pivot
-onready var animation = get_node("Pivot/AnimationPlayer")
+onready var animation = get_node("AnimationTree")
 
-func _ready():
-	animation.play("sword and shield idle (4)-loop")
-	
 	
 func _physics_process(delta):
 	var input_vector = get_input_vector()
@@ -30,7 +27,6 @@ func _physics_process(delta):
 	update_snap_vector()
 	jump()
 	#apply_controller_rotation()
-	#spring_arm.rotation.x = clamp(spring_arm.rotation.x, deg2rad(-75), deg2rad(75))
 	velocity = move_and_slide_with_snap(velocity, snap_vector, Vector3.UP, true)
 	define_player_state()
 	
@@ -47,6 +43,7 @@ func get_direction(input_vector):
 	
 	
 func apply_movement(input_vector, direction, delta):
+	animation.set("parameters/Idle2Moving/blend_amount", input_vector.length())
 	if direction != Vector3.ZERO:
 		velocity.x = velocity.move_toward(direction * max_speed, acceleration * delta).x
 		velocity.z = velocity.move_toward(direction * max_speed, acceleration * delta).z

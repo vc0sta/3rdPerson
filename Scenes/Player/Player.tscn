@@ -1,38 +1,34 @@
 [gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scenes/Player/Player.gd" type="Script" id=1]
-[ext_resource path="res://Assets/Warrior.gltf" type="PackedScene" id=2]
+[ext_resource path="res://Assets/placeholder.gltf" type="PackedScene" id=2]
 
 [sub_resource type="CapsuleShape" id=1]
-radius = 1.41509
-height = 1.14993
-
-[sub_resource type="AnimationNodeAnimation" id=2]
-animation = "sword and shield idle (4)-loop"
+radius = 0.922183
+height = 2.20291
 
 [sub_resource type="AnimationNodeAnimation" id=3]
-animation = "sword and shield attack (2)-loop"
+animation = "Idle-loop"
 
-[sub_resource type="AnimationNodeStateMachine" id=4]
-states/Idle/node = SubResource( 2 )
-states/Idle/position = Vector2( 489.5, 73 )
-"states/sword and shield attack (2)-loop/node" = SubResource( 3 )
-"states/sword and shield attack (2)-loop/position" = Vector2( 892.5, 68.5 )
+[sub_resource type="AnimationNodeBlend2" id=2]
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id=5]
+[sub_resource type="AnimationNodeAnimation" id=4]
+animation = "Running-loop"
+
+[sub_resource type="AnimationNodeBlendTree" id=5]
+graph_offset = Vector2( 112, 107.536 )
+nodes/Idle/node = SubResource( 3 )
+nodes/Idle/position = Vector2( 150, 150 )
+nodes/Idle2Moving/node = SubResource( 2 )
+nodes/Idle2Moving/position = Vector2( 360, 190 )
+nodes/Running/node = SubResource( 4 )
+nodes/Running/position = Vector2( 130, 310 )
+nodes/output/position = Vector2( 560, 240 )
+node_connections = [ "Idle2Moving", 0, "Idle", "Idle2Moving", 1, "Running", "output", 0, "Idle2Moving" ]
 
 [node name="Player" type="KinematicBody"]
-script = ExtResource( 1 )
-
-[node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, -5.96046e-08, 1, 0, -1, -5.96046e-08, 0, 1.54774, -3.8147e-06 )
-shape = SubResource( 1 )
-
-[node name="Pivot" parent="." instance=ExtResource( 2 )]
-transform = Transform( -2, 0, -1.74846e-07, 0, 2, 0, 1.74846e-07, 0, -2, 0, 0, 0 )
-
-[node name="Armature" parent="Pivot" index="0"]
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
+script = ExtResource( 1 )
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.918011, 0.396555, 0, -0.396555, 0.918011, 0, 7.56684, 8.96612 )
@@ -40,11 +36,21 @@ fov = 70.9
 size = 50.0
 near = 0.01
 
+[node name="Pivot" parent="." instance=ExtResource( 2 )]
+transform = Transform( 2, 0, 3.49691e-07, 0, 2, 0, -3.49691e-07, 0, 2, 0, 0, 0 )
+
+[node name="Armature" parent="Pivot" index="0"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, -5.96046e-08, 1, 0, -1, -5.96046e-08, 0, 1.9813, -3.8147e-06 )
+shape = SubResource( 1 )
+
 [node name="AnimationTree" type="AnimationTree" parent="."]
 pause_mode = 2
-tree_root = SubResource( 4 )
+tree_root = SubResource( 5 )
 anim_player = NodePath("../Pivot/AnimationPlayer")
 active = true
-parameters/playback = SubResource( 5 )
+parameters/Idle2Moving/blend_amount = 0.0
 
 [editable path="Pivot"]
