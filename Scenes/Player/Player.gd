@@ -2,7 +2,7 @@ extends KinematicBody
 
 export var max_speed = 30
 export var acceleration = 70
-export var friction = 80
+export var friction = 160
 export var air_friction = 5
 export var gravity = -40
 export var jump_impulse = 20

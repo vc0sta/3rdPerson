@@ -16,7 +16,7 @@ animation = "Idle-loop"
 animation = "Running-loop"
 
 [sub_resource type="AnimationNodeBlendTree" id=5]
-graph_offset = Vector2( -160.929, 332.945 )
+graph_offset = Vector2( 0, 368.843 )
 nodes/Idle/node = SubResource( 2 )
 nodes/Idle/position = Vector2( 10, 370 )
 nodes/Movement/node = SubResource( 3 )
@@ -24,7 +24,7 @@ nodes/Movement/position = Vector2( 240, 410 )
 nodes/Running/node = SubResource( 4 )
 nodes/Running/position = Vector2( -10, 510 )
 nodes/output/position = Vector2( 430, 400 )
-node_connections = [ "output", 0, "Movement", "Movement", 0, "Idle", "Movement", 1, "Running" ]
+node_connections = [ "Movement", 0, "Idle", "Movement", 1, "Running", "output", 0, "Movement" ]
 
 [node name="Player" type="KinematicBody"]
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
@@ -41,10 +41,13 @@ transform = Transform( 1, 0, 0, 0, -5.96046e-08, 1, 0, -1, -5.96046e-08, 0, 1.98
 shape = SubResource( 1 )
 
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.918011, 0.396555, 0, -0.396555, 0.918011, 0, 7.56684, 8.96612 )
+transform = Transform( 1, -1.23634e-07, 1.23634e-07, 0, 0.707107, 0.707107, -1.74846e-07, -0.707107, 0.707107, -1.78345, 31.2644, 28.1379 )
+projection = 1
+current = true
 fov = 70.9
-size = 50.0
+size = 30.0
 near = 0.01
+far = 75.0
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 pause_mode = 2

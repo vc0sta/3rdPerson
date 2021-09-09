@@ -5,9 +5,9 @@ var ip = "127.0.0.1"
 var port = 1909
 
 func _ready():
-	ConnectToServer()
+	ConnectToServer(ip, port)
 	
-func ConnectToServer():
+func ConnectToServer(ip, port):
 	print("Client Started")
 	network.create_client(ip, port)
 	get_tree().set_network_peer(network)

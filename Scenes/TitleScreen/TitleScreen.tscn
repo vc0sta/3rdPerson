@@ -1,0 +1,66 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Assets/Menu/GameLogo.png" type="Texture" id=1]
+[ext_resource path="res://Scenes/TitleScreen/Buttons/OptionsButton.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/TitleScreen/Buttons/LoadGameButton.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/TitleScreen/Buttons/NewGameButton.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scenes/FadeIn/FadeIn.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scenes/TitleScreen/TitleScreen.gd" type="Script" id=6]
+
+[node name="TitleScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Menu" type="VBoxContainer" parent="."]
+margin_left = 120.0
+margin_top = 80.0
+margin_right = 1160.0
+margin_bottom = 640.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Logo" type="TextureRect" parent="Menu"]
+margin_right = 1040.0
+margin_bottom = 200.0
+texture = ExtResource( 1 )
+stretch_mode = 4
+
+[node name="CenterRow" type="HBoxContainer" parent="Menu"]
+margin_top = 204.0
+margin_right = 1040.0
+margin_bottom = 560.0
+size_flags_vertical = 3
+
+[node name="Buttons" type="VBoxContainer" parent="Menu/CenterRow"]
+margin_right = 1040.0
+margin_bottom = 356.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 5
+alignment = 1
+
+[node name="NewGameButton" parent="Menu/CenterRow/Buttons" instance=ExtResource( 4 )]
+margin_top = 75.0
+margin_bottom = 140.0
+scene_to_load = "res://TestScene.tscn"
+
+[node name="LoadGameButton" parent="Menu/CenterRow/Buttons" instance=ExtResource( 3 )]
+margin_top = 145.0
+margin_bottom = 210.0
+scene_to_load = "res://TestScene.tscn"
+
+[node name="OptionsButton" parent="Menu/CenterRow/Buttons" instance=ExtResource( 2 )]
+margin_top = 215.0
+margin_bottom = 280.0
+scene_to_load = "res://TestScene.tscn"
+
+[node name="FadeIn" parent="." instance=ExtResource( 5 )]
+visible = false
+light_mask = 2
+
+[connection signal="fade_finished" from="FadeIn" to="." method="_on_FadeIn_fade_finished"]
