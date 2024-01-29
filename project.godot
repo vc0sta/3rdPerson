@@ -10,14 +10,14 @@ config_version=5
 
 [application]
 
-config/name="BlightDoor"
-run/main_scene="res://TestScene.tscn"
+config/name="3rd Person"
+run/main_scene="res://Main.tscn"
 config/features=PackedStringArray("4.2")
 config/icon="res://icon.png"
 
 [autoload]
 
-Server="*res://Scenes/Singletons/Server.gd"
+Focus="*res://Scripts/Focus.gd"
 
 [display]
 
@@ -56,24 +56,29 @@ jump={
 , Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":0,"pressure":0.0,"pressed":false,"script":null)
 ]
 }
-look_up={
+tp_camera_up={
 "deadzone": 0.5,
 "events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":3,"axis_value":-1.0,"script":null)
 ]
 }
-look_down={
+tp_camera_down={
 "deadzone": 0.5,
 "events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":3,"axis_value":1.0,"script":null)
 ]
 }
-look_right={
+tp_camera_right={
 "deadzone": 0.5,
 "events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":2,"axis_value":1.0,"script":null)
 ]
 }
-look_left={
+tp_camera_left={
 "deadzone": 0.5,
 "events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":2,"axis_value":-1.0,"script":null)
+]
+}
+toggle_target={
+"deadzone": 0.5,
+"events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":8,"pressure":0.0,"pressed":false,"script":null)
 ]
 }
 

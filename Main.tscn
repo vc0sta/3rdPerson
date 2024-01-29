@@ -1,0 +1,38 @@
+[gd_scene load_steps=4 format=3 uid="uid://bh4kbikfogjg7"]
+
+[ext_resource type="Script" path="res://Map.gd" id="1_elqgo"]
+[ext_resource type="PackedScene" uid="uid://bnemogwirp52q" path="res://Scenes/Player/Player.tscn" id="2_lxao6"]
+[ext_resource type="PackedScene" uid="uid://ga4brol6kes6" path="res://Scenes/world.tscn" id="3_qtfuu"]
+
+[node name="Map" type="Node"]
+script = ExtResource("1_elqgo")
+player_scene = ExtResource("2_lxao6")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.34261, 0.939478, 0, -0.939478, 0.34261, 0, 3.91781, 3.41323)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Host" type="Button" parent="CanvasLayer"]
+offset_right = 197.0
+offset_bottom = 56.0
+text = "HOST"
+metadata/_edit_use_anchors_ = true
+
+[node name="Join" type="Button" parent="CanvasLayer"]
+offset_left = 2.0
+offset_top = 86.0
+offset_right = 197.0
+offset_bottom = 142.0
+text = "JOIN"
+metadata/_edit_use_anchors_ = true
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://Scenes/Player/Player.tscn")
+spawn_path = NodePath("..")
+
+[node name="World" parent="." instance=ExtResource("3_qtfuu")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, -5, 0)
+
+[connection signal="pressed" from="CanvasLayer/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="CanvasLayer/Join" to="." method="_on_join_pressed"]
