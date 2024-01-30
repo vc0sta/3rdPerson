@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bnemogwirp52q"]
+[gd_scene load_steps=20 format=3 uid="uid://bnemogwirp52q"]
 
 [ext_resource type="Script" path="res://Scenes/Player/Player.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://d0rauwd4ygi30" path="res://Assets/placeholder.gltf" id="2"]
@@ -282,7 +282,7 @@ tracks/37/keys = PackedFloat32Array(0, 1, -0.0156124, -0.00312945, 0.00292877, 0
 [sub_resource type="Animation" id="Animation_v475h"]
 resource_name = "Jump-loop"
 length = 1.23333
-loop_mode = 1
+step = 0.02
 tracks/0/type = "position_3d"
 tracks/0/imported = true
 tracks/0/enabled = true
@@ -1372,6 +1372,9 @@ _data = {
 "T-Pose_001": SubResource("Animation_vnscp")
 }
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wy13d"]
+animation = &"Jump"
+
 [sub_resource type="AnimationNodeAnimation" id="2"]
 animation = &"Idle"
 
@@ -1380,16 +1383,32 @@ animation = &"Idle"
 [sub_resource type="AnimationNodeAnimation" id="4"]
 animation = &"Running"
 
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_ujnhl"]
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_jr1jd"]
+input_0/name = "false"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "true"
+input_1/auto_advance = false
+input_1/reset = true
+
 [sub_resource type="AnimationNodeBlendTree" id="5"]
-graph_offset = Vector2(-334.895, 416.59)
+graph_offset = Vector2(-1021.21, -246)
+nodes/Animation/node = SubResource("AnimationNodeAnimation_wy13d")
+nodes/Animation/position = Vector2(220, 640)
 nodes/Idle/node = SubResource("2")
 nodes/Idle/position = Vector2(0, 360)
 nodes/Movement/node = SubResource("3")
-nodes/Movement/position = Vector2(240, 420)
+nodes/Movement/position = Vector2(300, 380)
 nodes/Running/node = SubResource("4")
 nodes/Running/position = Vector2(-10, 510)
-nodes/output/position = Vector2(430, 400)
-node_connections = [&"Movement", 0, &"Idle", &"Movement", 1, &"Running", &"output", 0, &"Movement"]
+nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_ujnhl")
+nodes/TimeScale/position = Vector2(440, 600)
+nodes/on_air/node = SubResource("AnimationNodeTransition_jr1jd")
+nodes/on_air/position = Vector2(640, 400)
+nodes/output/position = Vector2(860, 400)
+node_connections = [&"Movement", 0, &"Idle", &"Movement", 1, &"Running", &"TimeScale", 0, &"Animation", &"on_air", 0, &"Movement", &"on_air", 1, &"TimeScale", &"output", 0, &"on_air"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_swp74"]
 properties/0/path = NodePath(".:position")
@@ -1401,6 +1420,9 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath(".:movement_vector")
 properties/2/spawn = true
 properties/2/replication_mode = 1
+properties/3/path = NodePath("AnimationTree:parameters/on_air/transition_request")
+properties/3/spawn = true
+properties/3/replication_mode = 2
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_4n4cd"]
 viewport_path = NodePath("Sprite3D/SubViewport")
@@ -1416,41 +1438,46 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
 [node name="Skeleton3D" parent="Pivot/Armature" index="0"]
-bones/0/position = Vector3(-1.00099e-05, 1.00072, -0.00921983)
-bones/0/rotation = Quaternion(-0.0369451, -0.367057, -0.0149053, 0.929345)
-bones/1/rotation = Quaternion(0.0497438, 0.0407297, -0.00702613, 0.997906)
-bones/2/rotation = Quaternion(0.0995922, 0.080932, -0.0182414, 0.991564)
-bones/3/rotation = Quaternion(0.0994954, 0.0809666, -0.0182079, 0.991571)
-bones/4/rotation = Quaternion(-0.0335646, -0.0107746, 0.00162758, 0.999377)
-bones/5/rotation = Quaternion(-0.059013, 0.176586, -0.0104241, 0.982459)
-bones/7/rotation = Quaternion(0.0128034, -0.00262933, -0.0644958, 0.997832)
-bones/8/rotation = Quaternion(-0.114324, -0.0478975, -0.524948, 0.842061)
-bones/9/rotation = Quaternion(0.0591217, -0.409891, 0.0114366, 0.910145)
-bones/10/rotation = Quaternion(0.138808, -0.0138071, 0.144492, 0.979624)
-bones/11/rotation = Quaternion(-0.00584401, -0.0613007, -0.0349866, 0.997489)
-bones/12/rotation = Quaternion(-0.000810002, 0.00671272, -0.144586, 0.989469)
-bones/13/rotation = Quaternion(-2.03727e-08, -3.92902e-10, 2.06001e-10, 1)
-bones/15/rotation = Quaternion(0.0787772, 0.0470864, -0.0436536, 0.994822)
-bones/16/rotation = Quaternion(-0.00298631, 0.000496085, 0.00685923, 0.999972)
-bones/17/rotation = Quaternion(3.80423e-08, -8.01374e-08, -2.67755e-08, 1)
-bones/19/rotation = Quaternion(0.0193117, 0.0784591, 0.0812004, 0.993417)
-bones/20/rotation = Quaternion(-0.0919889, -0.186659, 0.49616, 0.842925)
-bones/21/rotation = Quaternion(-0.0217777, 0.361261, 0.0479311, 0.930977)
-bones/22/rotation = Quaternion(0.0625249, 0.10524, 0.111377, 0.98621)
-bones/23/rotation = Quaternion(-0.0100842, -0.00823584, 0.0538772, 0.998463)
-bones/24/rotation = Quaternion(-0.00119655, -0.00567194, 0.187234, 0.982298)
-bones/25/rotation = Quaternion(1.36934e-08, 5.09317e-11, -4.45652e-11, 1)
-bones/27/rotation = Quaternion(-0.078853, -0.0427594, -0.000614518, 0.995969)
-bones/28/rotation = Quaternion(0.0718424, -0.163295, -0.0355756, 0.983315)
-bones/29/rotation = Quaternion(5.21541e-08, 3.72529e-08, -6.18165e-08, 1)
-bones/31/rotation = Quaternion(-0.212652, 0.0786788, 0.101672, 0.968634)
-bones/32/rotation = Quaternion(0.288116, -0.117439, -0.0372047, 0.949639)
-bones/33/rotation = Quaternion(-0.0485725, 0.00308293, -0.0631092, 0.996819)
-bones/34/rotation = Quaternion(-0.0204121, -0.0279792, 0.007658, 0.999371)
-bones/36/rotation = Quaternion(-0.0279116, -0.124913, -0.122897, 0.984131)
-bones/37/rotation = Quaternion(0.282289, -0.0760166, -0.025975, 0.95596)
-bones/38/rotation = Quaternion(-0.177092, -0.00746208, 0.144463, 0.973506)
-bones/39/rotation = Quaternion(-0.0156124, -0.00312945, 0.00292877, 0.999869)
+bones/0/position = Vector3(-1.00061e-05, 1.00072, -0.00921984)
+bones/0/rotation = Quaternion(-0.00134071, -0.219152, -0.040033, 0.974868)
+bones/1/rotation = Quaternion(0.0484483, 0.0207848, -0.00636599, 0.998589)
+bones/2/rotation = Quaternion(0.0964351, 0.0408201, -0.0126039, 0.994422)
+bones/3/rotation = Quaternion(0.0964353, 0.0408201, -0.0126041, 0.994422)
+bones/4/rotation = Quaternion(-0.0405953, -0.0109951, 0.00800002, 0.999083)
+bones/5/position = Vector3(-1.57269e-09, 0.114084, 0.0192089)
+bones/5/rotation = Quaternion(-0.0727258, 0.0962951, -0.0160288, 0.992563)
+bones/7/rotation = Quaternion(0.0135038, -0.0171259, -0.0679734, 0.997449)
+bones/8/rotation = Quaternion(-0.088198, -0.0362448, -0.516587, 0.850909)
+bones/9/rotation = Quaternion(0.0668153, -0.529411, -0.0291368, 0.845228)
+bones/10/rotation = Quaternion(0.0882483, -0.0789172, 0.0915179, 0.988741)
+bones/11/rotation = Quaternion(-0.00906556, -0.0636031, -0.254917, 0.964826)
+bones/12/rotation = Quaternion(-0.00131744, -0.0178249, -0.348465, 0.937151)
+bones/13/rotation = Quaternion(-3.08646e-08, 1.83218e-09, 1.12922e-08, 1)
+bones/15/rotation = Quaternion(0.0374508, 0.011951, -0.0447719, 0.998224)
+bones/16/rotation = Quaternion(0.0149812, 0.0451394, 0.0133434, 0.998779)
+bones/17/rotation = Quaternion(3.60328e-08, -2.8799e-07, -2.15106e-07, 1)
+bones/19/rotation = Quaternion(0.0150566, 0.0548184, 0.0730891, 0.995704)
+bones/20/position = Vector3(-0.138949, -0.0901645, 0.0121568)
+bones/20/rotation = Quaternion(-0.0267548, -0.192423, 0.498055, 0.845103)
+bones/21/rotation = Quaternion(0.0136539, 0.456009, 0.0638662, 0.887576)
+bones/22/rotation = Quaternion(0.017416, 0.136837, 0.0783676, 0.987335)
+bones/23/rotation = Quaternion(-0.00395864, -0.000884583, 0.255396, 0.966828)
+bones/24/rotation = Quaternion(-0.00244266, 0.0133002, 0.378968, 0.925311)
+bones/25/rotation = Quaternion(6.57019e-09, 2.91948e-10, -1.871e-09, 1)
+bones/27/rotation = Quaternion(-0.0436001, -0.0245064, 0.020671, 0.998535)
+bones/28/rotation = Quaternion(0.0727736, -0.165798, -0.0363225, 0.9828)
+bones/29/rotation = Quaternion(-1.23226e-07, -3.98474e-06, -3.91298e-06, 1)
+bones/31/rotation = Quaternion(-0.151355, 0.0769713, 0.0376224, 0.98476)
+bones/32/rotation = Quaternion(0.286458, -0.0837675, -0.0340325, 0.953817)
+bones/33/rotation = Quaternion(-0.131348, -0.00450531, -0.0273331, 0.990949)
+bones/34/rotation = Quaternion(-0.0296024, -0.0311981, 0.00598623, 0.999057)
+bones/36/rotation = Quaternion(-0.158761, -0.100233, -0.090652, 0.978024)
+bones/37/rotation = Quaternion(0.47691, -0.0482179, -0.0165482, 0.877473)
+bones/38/rotation = Quaternion(-0.0985114, 0.00753797, 0.0924816, 0.990801)
+bones/39/rotation = Quaternion(-0.056729, 0.0251559, -0.0182319, 0.997906)
+
+[node name="TargetingCamera" type="Camera3D" parent="Pivot"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.396893, 2.19002, 2.20274)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, -8.74228e-08, -8.74228e-08, 8.74228e-08, 1, 1.58932e-08, 8.74228e-08, -1.58932e-08, 1, 0, 1.9813, -3.8147e-06)
@@ -1464,7 +1491,11 @@ libraries = {
 }
 tree_root = SubResource("5")
 anim_player = NodePath("../Pivot/AnimationPlayer")
-parameters/Movement/blend_amount = 0.0
+parameters/Movement/blend_amount = 0.37
+parameters/TimeScale/scale = 1.3
+parameters/on_air/current_state = "false"
+parameters/on_air/transition_request = ""
+parameters/on_air/current_index = 0
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_swp74")
@@ -1483,10 +1514,12 @@ rotation = 6.28319
 text = "Player 1"
 
 [node name="ThirdPersonCamera" parent="." instance=ExtResource("3_lhn73")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.70249e-09, 2.00275, 0.0881062)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -7.70249e-09, 1.27702, 0.0881062)
 pivot_offset = Vector2(0, 1)
 spring_arm_margin = 1.86
 doppler_tracking = 2
 FOV = 47.6
+
+[node name="dummy_cam" type="Camera3D" parent="."]
 
 [editable path="Pivot"]

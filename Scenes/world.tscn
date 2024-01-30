@@ -105,7 +105,7 @@ size = Vector3(30, 2, 30)
 material = SubResource("ShaderMaterial_rwhea")
 
 [node name="AnimationBody3D3" type="AnimatableBody3D" parent="."]
-transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, 1.76726, 3.75, 9.05)
+transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, 1.8479, 3.75, 9.05)
 collision_layer = 7
 collision_mask = 7
 

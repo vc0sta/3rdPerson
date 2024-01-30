@@ -2,14 +2,11 @@
 @tool
 class_name ThirdPersonCamera extends Node3D
 
-
 @onready var _camera := $Camera
 @onready var _camera_rotation_pivot = $RotationPivot
 @onready var _camera_offset_pivot = $RotationPivot/OffsetPivot
 @onready var _camera_spring_arm := $RotationPivot/OffsetPivot/CameraSpringArm
 @onready var _camera_marker := $RotationPivot/OffsetPivot/CameraSpringArm/CameraMarker
-
-
 
 ## 
 @export var distance_from_pivot := 10.0 :
@@ -83,39 +80,38 @@ class_name ThirdPersonCamera extends Node3D
 var camera_tilt_deg := 0.
 var camera_horizontal_rotation_deg := 0.
 
+var active_target
 
 func _ready():
 	_camera.top_level = true
 
+func set_target(target):
+	target_on = true
+	active_target = target
+
+func remove_target():
+	target_on = false
 
 func _physics_process(_delta):
 	_update_camera_properties()
 	if Engine.is_editor_hint() :
 		_camera_marker.global_position = Vector3(0., 0., 1.).rotated(Vector3(1., 0., 0.), deg_to_rad(initial_dive_angle_deg)).rotated(Vector3(0., 1., 0.), deg_to_rad(-camera_horizontal_rotation_deg)) * _camera_spring_arm.spring_length + _camera_spring_arm.global_position
 		pass
-		#toggle_target()
 		
-	if target_on:
-		pass
-	else:
-		tweenCameraToMarker()
-		_camera_offset_pivot.global_position = _camera_offset_pivot.get_parent().to_global(Vector3(pivot_offset.x, pivot_offset.y, 0.0)) 
-		_camera_rotation_pivot.global_rotation_degrees.x = initial_dive_angle_deg
-		_camera_rotation_pivot.global_position = global_position
-		_process_tilt_input()
-		_process_horizontal_rotation_input()
-		_update_camera_tilt()
-		_update_camera_horizontal_rotation()
-		
-#func toggle_target():
-	#if Focus.is_action_just_pressed("toggle_target"):
-		#target_on = !target_on
+	tweenCameraToMarker()
+	_camera_offset_pivot.global_position = _camera_offset_pivot.get_parent().to_global(Vector3(pivot_offset.x, pivot_offset.y, 0.0)) 
+	_camera_rotation_pivot.global_rotation_degrees.x = initial_dive_angle_deg
+	_camera_rotation_pivot.global_position = global_position
+	_process_tilt_input()
+	_process_horizontal_rotation_input()
+	_update_camera_tilt()
+	_update_camera_horizontal_rotation()
 	
 func tweenCameraToMarker() :
 	var tween = create_tween()
 	tween.tween_property(_camera, "global_position", _camera_marker.global_position, 0.1)
 
-func _process_horizontal_rotation_input() :
+func _process_horizontal_rotation_input():
 	if InputMap.has_action("tp_camera_right") and InputMap.has_action("tp_camera_left") :
 		var camera_horizontal_rotation_variation = Focus.get_action_strength("tp_camera_right") -  Focus.get_action_strength("tp_camera_left")
 		camera_horizontal_rotation_variation = camera_horizontal_rotation_variation * get_process_delta_time() * 30 * horizontal_rotation_sensitiveness
@@ -136,6 +132,11 @@ func _update_camera_tilt() :
 
 func _update_camera_horizontal_rotation() :
 	# TODO : inverse
+	
+	#if !$"..".targeting:
+		#print($"..".target)
+		#_camera.look_at($"..".target)
+	#else:
 	var tween = create_tween()
 	tween.tween_property(_camera_rotation_pivot, "global_rotation_degrees:y", camera_horizontal_rotation_deg * -1, 0.1).as_relative()
 	camera_horizontal_rotation_deg = 0.0 # reset the value

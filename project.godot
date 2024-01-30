@@ -76,7 +76,7 @@ tp_camera_left={
 "events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":2,"axis_value":-1.0,"script":null)
 ]
 }
-toggle_target={
+target={
 "deadzone": 0.5,
 "events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":8,"pressure":0.0,"pressed":false,"script":null)
 ]
@@ -85,6 +85,7 @@ toggle_target={
 [physics]
 
 common/enable_pause_aware_picking=true
+3d/size/initial_screen=0
 
 [rendering]
 

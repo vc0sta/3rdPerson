@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://d11ppjoixe5ke"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wx5ae"]
+albedo_color = Color(0.564706, 0.176471, 0.290196, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_g2s68"]
+material = SubResource("StandardMaterial3D_wx5ae")
+top_radius = 1.0
+bottom_radius = 1.0
+height = 4.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_4x21i"]
+
+[node name="Node3D" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CylinderMesh_g2s68")
+skeleton = NodePath("StaticBody3D")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+shape = SubResource("CylinderShape3D_4x21i")
+
+[node name="Target" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.678524, 0)
