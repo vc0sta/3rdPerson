@@ -9,8 +9,9 @@
 script = ExtResource("1_elqgo")
 player_scene = ExtResource("2_lxao6")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.34261, 0.939478, 0, -0.939478, 0.34261, 0, 3.91781, 3.41323)
+[node name="Players" type="Node" parent="."]
+
+[node name="----- Debug Menu -----" type="Node" parent="."]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -28,12 +29,15 @@ offset_bottom = 142.0
 text = "JOIN"
 metadata/_edit_use_anchors_ = true
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://Scenes/Player/Player.tscn")
-spawn_path = NodePath("..")
+[node name="----- World Map -----" type="Node" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.34261, 0.939478, 0, -0.939478, 0.34261, 0, 3.91781, 3.41323)
 
 [node name="World" parent="." instance=ExtResource("3_qtfuu")]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, -5, 0)
+
+[node name="----- Interactive Objects -----" type="Node" parent="."]
 
 [node name="Targetable" type="Node" parent="."]
 
@@ -45,6 +49,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.23862, 2, -44.1136)
 
 [node name="Target3" parent="Targetable" instance=ExtResource("4_fmth4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.54089, 2, -31.5786)
+
+[node name="----- Multiplayer -----" type="Node" parent="."]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://Scenes/Player/Player.tscn")
+spawn_path = NodePath("../Players")
 
 [connection signal="pressed" from="CanvasLayer/Host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="CanvasLayer/Join" to="." method="_on_join_pressed"]

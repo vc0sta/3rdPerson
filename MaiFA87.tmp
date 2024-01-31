@@ -1,0 +1,138 @@
+[gd_scene load_steps=13 format=3 uid="uid://bh4kbikfogjg7"]
+
+[ext_resource type="Script" path="res://Map.gd" id="1_elqgo"]
+[ext_resource type="PackedScene" uid="uid://bnemogwirp52q" path="res://Scenes/Player/Player.tscn" id="2_lxao6"]
+[ext_resource type="PackedScene" uid="uid://ga4brol6kes6" path="res://Scenes/world.tscn" id="3_qtfuu"]
+[ext_resource type="PackedScene" uid="uid://d11ppjoixe5ke" path="res://Scenes/target.tscn" id="4_fmth4"]
+[ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="5_e843i"]
+[ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3D.gd" id="6_quf48"]
+[ext_resource type="Script" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="7_ir7lo"]
+[ext_resource type="Script" path="res://addons/phantom_camera/scripts/resources/camera_3D_resource.gd" id="8_s3a0c"]
+
+[sub_resource type="Resource" id="Resource_hq1i8"]
+script = ExtResource("7_ir7lo")
+duration = 0.3
+transition = 1
+ease = 2
+
+[sub_resource type="Resource" id="Resource_3ui7s"]
+script = ExtResource("8_s3a0c")
+cull_mask = 1048575
+h_offset = 0.0
+v_offset = 0.0
+fov = 75.0
+
+[sub_resource type="Resource" id="Resource_vdx52"]
+script = ExtResource("7_ir7lo")
+duration = 0.25
+transition = 1
+ease = 2
+
+[sub_resource type="Resource" id="Resource_m0frc"]
+script = ExtResource("8_s3a0c")
+cull_mask = 1048575
+h_offset = 1.0
+v_offset = 0.0
+fov = 50.0
+
+[node name="Map" type="Node"]
+script = ExtResource("1_elqgo")
+player_scene = ExtResource("2_lxao6")
+
+[node name="----- Debug Menu -----" type="Node" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Host" type="Button" parent="CanvasLayer"]
+offset_right = 197.0
+offset_bottom = 56.0
+text = "HOST"
+metadata/_edit_use_anchors_ = true
+
+[node name="Join" type="Button" parent="CanvasLayer"]
+offset_left = 2.0
+offset_top = 86.0
+offset_right = 197.0
+offset_bottom = 142.0
+text = "JOIN"
+metadata/_edit_use_anchors_ = true
+
+[node name="----- World Map -----" type="Node" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.34261, 0.939478, 0, -0.939478, 0.34261, 0, 3.91781, 3.41323)
+
+[node name="World" parent="." instance=ExtResource("3_qtfuu")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, -5, 0)
+
+[node name="----- Interactive Objects -----" type="Node" parent="."]
+
+[node name="Targetable" type="Node" parent="."]
+
+[node name="Target" parent="Targetable" instance=ExtResource("4_fmth4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.1862, 2, -32.1495)
+
+[node name="Target2" parent="Targetable" instance=ExtResource("4_fmth4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.23862, 2, -44.1136)
+
+[node name="Target3" parent="Targetable" instance=ExtResource("4_fmth4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.54089, 2, -31.5786)
+
+[node name="----- Cameras -----" type="Node" parent="."]
+
+[node name="MainCamera3D" type="Camera3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.499999, 0, -0.5, 0.866023, -0.019, 10, 6.89)
+current = true
+
+[node name="PhantomCameraHost" type="Node" parent="MainCamera3D"]
+script = ExtResource("5_e843i")
+
+[node name="PlayerPhantomCamera3D" type="Node3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.499999, 0, -0.5, 0.866023, -0.019, 10, 6.89)
+script = ExtResource("6_quf48")
+priority_override = false
+priority = 10
+follow_mode = 6
+follow_target = NodePath("../PlayerCharacterBody3D")
+follow_parameters/spring_arm/spring_length = 10.0
+follow_parameters/spring_arm/collision_mask = 1
+follow_parameters/spring_arm/shape = null
+follow_parameters/spring_arm/margin = 0.2
+follow_parameters/target_offset = Vector3(0, 5, 0)
+follow_parameters/damping = false
+look_at_mode = 0
+tween_parameters = SubResource("Resource_hq1i8")
+tween_on_load = true
+inactive_update_mode = 0
+camera_3D_resource = SubResource("Resource_3ui7s")
+
+[node name="PlayerAimPhantomCamera3D" type="Node3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(0.953716, -0.0104945, 0.300522, 0, 0.99939, 0.0348995, -0.300706, -0.0332842, 0.953135, 0.431374, 1.35423, 1.41338)
+script = ExtResource("6_quf48")
+priority_override = false
+priority = 0
+follow_mode = 6
+follow_target = NodePath("../PlayerCharacterBody3D")
+follow_parameters/spring_arm/spring_length = 1.5
+follow_parameters/spring_arm/collision_mask = 1
+follow_parameters/spring_arm/shape = null
+follow_parameters/spring_arm/margin = 0.5
+follow_parameters/target_offset = Vector3(0, 0.795, 0)
+follow_parameters/damping = false
+look_at_mode = 0
+tween_parameters = SubResource("Resource_vdx52")
+tween_on_load = false
+inactive_update_mode = 0
+camera_3D_resource = SubResource("Resource_m0frc")
+
+[node name="----- Multiplayer -----" type="Node" parent="."]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://Scenes/Player/Player.tscn")
+spawn_path = NodePath("..")
+
+[connection signal="pressed" from="CanvasLayer/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="CanvasLayer/Join" to="." method="_on_join_pressed"]

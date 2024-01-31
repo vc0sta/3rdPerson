@@ -24,6 +24,10 @@ Focus="*res://Scripts/Focus.gd"
 window/size/viewport_width=1280
 window/size/viewport_height=720
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/phantom_camera/plugin.cfg")
+
 [input]
 
 move_forward={
