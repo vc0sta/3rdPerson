@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://4sl25f5m4lff"
-path.s3tc="res://.godot/imported/placeholder_Guard_03__normal.jpg-bcefe8fd4ad84b984701e0618c5953a7.s3tc.ctex"
+uid="uid://c2jmongupg4y2"
+path.s3tc="res://.godot/imported/Warrior_Guard_03__diffuse.jpg-b162f46ea52d3257ee8487d6a954ad5a.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ generator_parameters={}
 
 [deps]
 
-source_file="res://Assets/placeholder_Guard_03__normal.jpg"
-dest_files=["res://.godot/imported/placeholder_Guard_03__normal.jpg-bcefe8fd4ad84b984701e0618c5953a7.s3tc.ctex"]
+source_file="res://assets/Warrior_Guard_03__diffuse.jpg"
+dest_files=["res://.godot/imported/Warrior_Guard_03__diffuse.jpg-b162f46ea52d3257ee8487d6a954ad5a.s3tc.ctex"]
 
 [params]
 
@@ -21,12 +21,12 @@ compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
-compress/normal_map=1
+compress/normal_map=0
 compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=1
-roughness/src_normal="res://Assets/placeholder_Guard_03__normal.jpg"
+roughness/mode=0
+roughness/src_normal=""
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/normal_map_invert_y=false

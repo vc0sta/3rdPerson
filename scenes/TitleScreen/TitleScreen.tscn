@@ -1,17 +1,19 @@
 [gd_scene load_steps=7 format=3 uid="uid://b6b0wnud8opoc"]
 
-[ext_resource type="Texture2D" uid="uid://dske423rc5gt5" path="res://Assets/Menu/GameLogo.png" id="1"]
-[ext_resource type="PackedScene" path="res://Scenes/TitleScreen/Buttons/OptionsButton.tscn" id="2"]
-[ext_resource type="PackedScene" path="res://Scenes/TitleScreen/Buttons/LoadGameButton.tscn" id="3"]
-[ext_resource type="PackedScene" path="res://Scenes/TitleScreen/Buttons/NewGameButton.tscn" id="4"]
-[ext_resource type="PackedScene" path="res://Scenes/FadeIn/FadeIn.tscn" id="5"]
-[ext_resource type="Script" path="res://Scenes/TitleScreen/TitleScreen.gd" id="6"]
+[ext_resource type="Texture2D" uid="uid://dske423rc5gt5" path="res://assets/Menu/GameLogo.png" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/TitleScreen/Buttons/OptionsButton.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/TitleScreen/Buttons/LoadGameButton.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/TitleScreen/Buttons/NewGameButton.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/FadeIn/FadeIn.tscn" id="5"]
+[ext_resource type="Script" path="res://scripts/TitleScreen.gd" id="6"]
 
 [node name="TitleScreen" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("6")
 
 [node name="Menu" type="VBoxContainer" parent="."]
@@ -53,5 +55,7 @@ scene_to_load = "res://TestScene.tscn"
 visible = false
 light_mask = 2
 layout_mode = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
 
 [connection signal="fade_finished" from="FadeIn" to="." method="_on_FadeIn_fade_finished"]

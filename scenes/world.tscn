@@ -1,6 +1,6 @@
 [gd_scene load_steps=16 format=3 uid="uid://ga4brol6kes6"]
 
-[ext_resource type="Shader" uid="uid://dtq8vkrpvuqfj" path="res://Assets/gridmaterial.tres" id="1_78mpy"]
+[ext_resource type="Shader" uid="uid://dtq8vkrpvuqfj" path="res://assets/gridmaterial.tres" id="1_78mpy"]
 
 [sub_resource type="Environment" id="Environment_g3bud"]
 background_mode = 1

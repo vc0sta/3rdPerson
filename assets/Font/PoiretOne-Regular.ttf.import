@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://bxwn8vajcqo54"
-path="res://.godot/imported/PoiretOne-Regular.ttf-df1eda7a99b3d69013ec4ae3bbb1d76b.fontdata"
+path="res://.godot/imported/PoiretOne-Regular.ttf-377f1bd3bdd2bcc1049c41a4bdf4f68b.fontdata"
 
 [deps]
 
-source_file="res://Assets/Font/PoiretOne-Regular.ttf"
-dest_files=["res://.godot/imported/PoiretOne-Regular.ttf-df1eda7a99b3d69013ec4ae3bbb1d76b.fontdata"]
+source_file="res://assets/Font/PoiretOne-Regular.ttf"
+dest_files=["res://.godot/imported/PoiretOne-Regular.ttf-377f1bd3bdd2bcc1049c41a4bdf4f68b.fontdata"]
 
 [params]
 

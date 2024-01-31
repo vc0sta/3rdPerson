@@ -17,7 +17,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
-Focus="*res://Scripts/Focus.gd"
+Focus="*res://scripts/Focus.gd"
 
 [display]
 
