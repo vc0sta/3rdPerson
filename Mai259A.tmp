@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://bh4kbikfogjg7"]
 
 [ext_resource type="Script" path="res://scripts/Map.gd" id="1_elqgo"]
-[ext_resource type="PackedScene" uid="uid://bnemogwirp52q" path="res://scenes/Player.tscn" id="2_lxao6"]
+[ext_resource type="PackedScene" uid="uid://bnemogwirp52q" path="res://scenes/Player/Player.tscn" id="2_lxao6"]
 [ext_resource type="PackedScene" uid="uid://ga4brol6kes6" path="res://scenes/world.tscn" id="3_qtfuu"]
 [ext_resource type="PackedScene" uid="uid://d11ppjoixe5ke" path="res://scenes/target.tscn" id="4_fmth4"]
 
@@ -10,9 +10,6 @@ script = ExtResource("1_elqgo")
 player_scene = ExtResource("2_lxao6")
 
 [node name="Players" type="Node" parent="."]
-
-[node name="Player" parent="Players" instance_placeholder="res://scenes/Player.tscn"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.784916, 1.90735e-06, -20.3904)
 
 [node name="----- Debug Menu -----" type="Node" parent="."]
 

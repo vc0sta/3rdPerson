@@ -36,6 +36,7 @@ func _enter_tree():
 func _physics_process(delta):
 	var movement_vector = Vector3.ZERO
 	if is_multiplayer_authority():
+		# Movement related stuff
 		var input_vector = get_input_vector()
 		var direction = get_direction(input_vector)
 		movement_vector = input_vector
@@ -44,11 +45,12 @@ func _physics_process(delta):
 		apply_rotation()
 		apply_gravity(delta)
 		update_snap_vector()
-		jump()
 		set_velocity(velocity)
 		set_up_direction(Vector3.UP)
 		set_floor_stop_on_slope_enabled(true)
 		move_and_slide()
+		# Additional Input handling
+		handle_inputs()
  
 	animation.set("parameters/Movement/blend_amount", movement_vector.length())
 	if is_on_floor():
@@ -67,14 +69,10 @@ var tilt_sensitiveness = 15
 func apply_rotation() -> void:
 	if _player_pcam.get_follow_mode() == _player_pcam.Constants.FollowMode.THIRD_PERSON:
 		var active_pcam: PhantomCamera3D
-
 		if is_instance_valid(_aim_pcam):
 			_set_pcam_rotation(_player_pcam)
-			_set_pcam_rotation(_aim_pcam)
-			#if _player_pcam.get_priority() > _aim_pcam.get_priority():
-				#_toggle_aim_pcam(event)
-			#else:
-				#_toggle_aim_pcam(event)
+			#_set_pcam_rotation(_aim_pcam)
+
 
 func _set_pcam_rotation(pcam: PhantomCamera3D) -> void:
 	var pcam_rotation_degrees: Vector3
@@ -101,22 +99,20 @@ func _set_pcam_rotation(pcam: PhantomCamera3D) -> void:
 	# Change the SpringArm3D node's rotation and rotate around its target
 	pcam.set_third_person_rotation_degrees(pcam_rotation_degrees)
 
-func _toggle_aim_pcam(event: InputEvent) -> void:
-	if event is InputEventMouseButton \
-		and event.is_pressed() \
-		and event.button_index == 2 \
-		and (_player_pcam.is_active() or _aim_pcam.is_active()):
+func _toggle_aim_pcam(target) -> void:
+	_aim_pcam.set_look_at_target(target)
+	if (_player_pcam.is_active() or _aim_pcam.is_active()):
 		if _player_pcam.get_priority() > _aim_pcam.get_priority():
 			_aim_pcam.set_priority(30)
 		else:
 			_aim_pcam.set_priority(0)
 
 func random_target():
-	target = $"../Targetable".get_child(randi() % len($"../Targetable".get_children()))
+	target = $"/root/Map/Targetable".get_child(randi() % len($"/root/Map/Targetable".get_children()))
 	target_material.albedo_color = Color("#ff0000")
 	target.get_child(0).material_override = target_material
-	$ThirdPersonCamera.set_target(target)
-	
+	return target
+
 func get_input_vector():
 	var input_vector = Vector3.ZERO
 	input_vector.x = Focus.get_action_strength("move_right") - Focus.get_action_strength("move_left")
@@ -149,7 +145,12 @@ func apply_gravity(delta):
 func update_snap_vector():
 	snap_vector = -get_floor_normal() if is_on_floor() else Vector3.DOWN
 	
-func jump():
+func handle_inputs():
+	# Target
+	if Focus.is_action_just_pressed("target"):
+		_toggle_aim_pcam(random_target())
+	
+	# Jumping
 	if Focus.is_action_just_pressed("jump") and is_on_floor():
 		snap_vector = Vector3.ZERO
 		velocity.y = jump_impulse

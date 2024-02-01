@@ -1,10 +1,10 @@
 [gd_scene load_steps=7 format=3 uid="uid://b6b0wnud8opoc"]
 
 [ext_resource type="Texture2D" uid="uid://dske423rc5gt5" path="res://assets/Menu/GameLogo.png" id="1"]
-[ext_resource type="PackedScene" path="res://scenes/TitleScreen/Buttons/OptionsButton.tscn" id="2"]
-[ext_resource type="PackedScene" path="res://scenes/TitleScreen/Buttons/LoadGameButton.tscn" id="3"]
-[ext_resource type="PackedScene" path="res://scenes/TitleScreen/Buttons/NewGameButton.tscn" id="4"]
-[ext_resource type="PackedScene" path="res://scenes/FadeIn/FadeIn.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/Buttons/OptionsButton.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/Buttons/LoadGameButton.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/Buttons/NewGameButton.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/FadeIn.tscn" id="5"]
 [ext_resource type="Script" path="res://scripts/TitleScreen.gd" id="6"]
 
 [node name="TitleScreen" type="Control"]
