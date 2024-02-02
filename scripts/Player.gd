@@ -24,37 +24,29 @@ var snap_vector = Vector3.ZERO
 @onready var animation = $AnimationTree
 
 func _ready():
-	_main_camera.current = is_multiplayer_authority()
-	$Pivot/Sprite3D/SubViewport/Label.text = "Player" + name
+	$Pivot/Sprite3D/SubViewport/Label.text = str(is_multiplayer_authority())
+	
 	if is_multiplayer_authority():
+		_main_camera.current = true
 		_player_pcam.set_follow_target_node($".")
 	
 		
 func _enter_tree():
 	set_multiplayer_authority(name.to_int())
 	
+	
 func _physics_process(delta):
-	var movement_vector = Vector3.ZERO
+	#var movement_vector = Vector3.ZERO
 	if is_multiplayer_authority():
-		# Movement related stuff
-		var input_vector = get_input_vector()
-		var direction = get_direction(input_vector)
-		movement_vector = input_vector
-		apply_movement(input_vector, direction, delta)
-		apply_friction(direction, delta)
-		apply_rotation()
+		# Inputs
+		handle_inputs(delta)
+		
+		# Apply movements
 		apply_gravity(delta)
-		update_snap_vector()
 		set_velocity(velocity)
 		set_up_direction(Vector3.UP)
 		set_floor_stop_on_slope_enabled(true)
 		move_and_slide()
-		# Additional Input handling
-		handle_inputs()
- 
-	animation.set("parameters/Movement/blend_amount", movement_vector.length())
-	if is_on_floor():
-		animation.set("parameters/on_air/transition_request", "false")
 
 var horizontal_rotation_sensitiveness = 15
 
@@ -76,25 +68,24 @@ func apply_rotation() -> void:
 
 func _set_pcam_rotation(pcam: PhantomCamera3D) -> void:
 	var pcam_rotation_degrees: Vector3
+	
 	# Assigns the current 3D rotation of the SpringArm3D node - so it starts off where it is in the editor
 	pcam_rotation_degrees = pcam.get_third_person_rotation_degrees()
-	
-	if InputMap.has_action("tp_camera_right") and InputMap.has_action("tp_camera_left") :
-		var camera_horizontal_rotation_variation = Focus.get_action_strength("tp_camera_right") -  Focus.get_action_strength("tp_camera_left")
-		camera_horizontal_rotation_variation = camera_horizontal_rotation_variation * get_process_delta_time() * 30 * horizontal_rotation_sensitiveness
-		# Change the Y rotation value
-		pcam_rotation_degrees.y -= camera_horizontal_rotation_variation
-		# Sets the rotation to fully loop around its target, but witout going below or exceeding 0 and 360 degrees respectively
-		pcam_rotation_degrees.y = wrapf(pcam_rotation_degrees.y, min_pitch, max_pitch)
-		
-	if InputMap.has_action("tp_camera_up") and InputMap.has_action("tp_camera_down") :
-		var tilt_variation = Focus.get_action_strength("tp_camera_up") -  Focus.get_action_strength("tp_camera_down")
-		tilt_variation = tilt_variation * get_process_delta_time() * 5 * tilt_sensitiveness
 
-		# Change the X rotation
-		pcam_rotation_degrees.x += tilt_variation
-		# Clamp the rotation in the X axis so it go over or under the target
-		pcam_rotation_degrees.x = clampf(pcam_rotation_degrees.x, min_yaw, max_yaw)
+	var camera_horizontal_rotation_variation = Focus.get_action_strength("camera_right") -  Focus.get_action_strength("camera_left")
+	camera_horizontal_rotation_variation = camera_horizontal_rotation_variation * get_process_delta_time() * 30 * horizontal_rotation_sensitiveness
+	# Change the Y rotation value
+	pcam_rotation_degrees.y -= camera_horizontal_rotation_variation
+	# Sets the rotation to fully loop around its target, but witout going below or exceeding 0 and 360 degrees respectively
+	pcam_rotation_degrees.y = wrapf(pcam_rotation_degrees.y, min_pitch, max_pitch)
+
+	var tilt_variation = Focus.get_action_strength("camera_up") -  Focus.get_action_strength("camera_down")
+	tilt_variation = tilt_variation * get_process_delta_time() * 5 * tilt_sensitiveness
+
+	# Change the X rotation
+	pcam_rotation_degrees.x += tilt_variation
+	# Clamp the rotation in the X axis so it go over or under the target
+	pcam_rotation_degrees.x = clampf(pcam_rotation_degrees.x, min_yaw, max_yaw)
 
 	# Change the SpringArm3D node's rotation and rotate around its target
 	pcam.set_third_person_rotation_degrees(pcam_rotation_degrees)
@@ -104,8 +95,10 @@ func _toggle_aim_pcam(target) -> void:
 	if (_player_pcam.is_active() or _aim_pcam.is_active()):
 		if _player_pcam.get_priority() > _aim_pcam.get_priority():
 			_aim_pcam.set_priority(30)
+			targeting = true
 		else:
 			_aim_pcam.set_priority(0)
+			targeting = false
 
 func random_target():
 	target = $"/root/Map/Targetable".get_child(randi() % len($"/root/Map/Targetable".get_children()))
@@ -113,39 +106,62 @@ func random_target():
 	target.get_child(0).material_override = target_material
 	return target
 
-func get_input_vector():
+
+func apply_gravity(delta):
+	velocity.y += gravity * delta
+	velocity.y = clamp(velocity.y, gravity, jump_impulse)
+	update_snap_vector()
+	
+func update_snap_vector():
+	snap_vector = -get_floor_normal() if is_on_floor() else Vector3.DOWN
+	
+func handle_inputs(delta):
+	# Movement
 	var input_vector = Vector3.ZERO
 	input_vector.x = Focus.get_action_strength("move_right") - Focus.get_action_strength("move_left")
 	input_vector.z = Focus.get_action_strength("move_back") - Focus.get_action_strength("move_forward")
-	return input_vector.normalized() if input_vector.length() > 1 else input_vector
+	input_vector = input_vector.normalized() if input_vector.length() > 1 else input_vector
 	
-func get_direction(input_vector):
 	var direction = (input_vector.x * _main_camera.global_transform.basis.x) + (input_vector.z * _main_camera.global_transform.basis.z )
-	return direction
 	
-func apply_movement(input_vector, direction, delta):
+	# Set movement velocity
 	if direction != Vector3.ZERO:
 		velocity.x = velocity.move_toward(direction * max_speed, acceleration * delta).x
 		velocity.z = velocity.move_toward(direction * max_speed, acceleration * delta).z
-
-		pivot.rotation.y = lerp_angle(pivot.rotation.y, atan2(direction.x, direction.z), rot_speed * delta)
 		
-func apply_friction(direction, delta):
-	if direction == Vector3.ZERO:
+		pivot.rotation.y = lerp_angle(pivot.rotation.y, atan2(direction.x, direction.z), rot_speed * delta)
+	else:
 		if is_on_floor():
 			velocity = velocity.move_toward(Vector3.ZERO, friction * delta)
 		else:
 			velocity.x = velocity.move_toward(direction * max_speed, air_friction * delta).x
 			velocity.z = velocity.move_toward(direction * max_speed, air_friction * delta).z
+	
+	# Camera
+	if _player_pcam.get_follow_mode() == _player_pcam.Constants.FollowMode.THIRD_PERSON:
+		var pcam_rotation_degrees: Vector3
 
-func apply_gravity(delta):
-	velocity.y += gravity * delta
-	velocity.y = clamp(velocity.y, gravity, jump_impulse)
-	
-func update_snap_vector():
-	snap_vector = -get_floor_normal() if is_on_floor() else Vector3.DOWN
-	
-func handle_inputs():
+		# Assigns the current 3D rotation of the SpringArm3D node - so it starts off where it is in the editor
+		pcam_rotation_degrees = _player_pcam.get_third_person_rotation_degrees()
+
+		var camera_horizontal_rotation_variation = Focus.get_action_strength("camera_right") -  Focus.get_action_strength("camera_left")
+		camera_horizontal_rotation_variation = camera_horizontal_rotation_variation * get_process_delta_time() * 30 * horizontal_rotation_sensitiveness
+		# Change the Y rotation value
+		pcam_rotation_degrees.y -= camera_horizontal_rotation_variation
+		# Sets the rotation to fully loop around its target, but witout going below or exceeding 0 and 360 degrees respectively
+		pcam_rotation_degrees.y = wrapf(pcam_rotation_degrees.y, min_pitch, max_pitch)
+
+		var tilt_variation = Focus.get_action_strength("camera_up") -  Focus.get_action_strength("camera_down")
+		tilt_variation = tilt_variation * get_process_delta_time() * 5 * tilt_sensitiveness
+
+		# Change the X rotation
+		pcam_rotation_degrees.x += tilt_variation
+		# Clamp the rotation in the X axis so it go over or under the target
+		pcam_rotation_degrees.x = clampf(pcam_rotation_degrees.x, min_yaw, max_yaw)
+
+		# Change the SpringArm3D node's rotation and rotate around its target
+		_player_pcam.set_third_person_rotation_degrees(pcam_rotation_degrees)
+		
 	# Target
 	if Focus.is_action_just_pressed("target"):
 		_toggle_aim_pcam(random_target())
@@ -157,5 +173,12 @@ func handle_inputs():
 		animation.set("parameters/on_air/transition_request", "true")
 	if Focus.is_action_just_released("jump") and velocity.y > jump_impulse / 2:
 		velocity.y = jump_impulse / 2
+		
+	# Set animations
+	if targeting:
+		$Pivot.look_at(target.position)
+	animation.set("parameters/Movement/blend_amount", input_vector.length())
+	if is_on_floor():
+		animation.set("parameters/on_air/transition_request", "false")
 
 	
